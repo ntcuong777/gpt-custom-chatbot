@@ -37,6 +37,9 @@ class AppConfig(BaseModel):
     CLASSIFICATION_MODEL: Path = MODELS_DIR.joinpath(
         'question_classification.sav')
 
+    # ChatGPT conversational API config
+    NUM_PREVIOUS_DIALOGUES: int = 5 # only use previous 5 dialogues to generate new responses
+
 
 class GlobalConfig(BaseSettings):
     """Global configurations."""

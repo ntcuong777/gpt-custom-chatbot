@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from application.initializer import IncludeAPIRouter
+from application.initializer import IncludeAPIRouter, SqlDatabaseInitializer
 from application.main.config import settings
 
 
@@ -20,6 +20,7 @@ def get_application():
     return _app
 
 
+SqlDatabaseInitializer.init_database()
 app = get_application()
 
 
