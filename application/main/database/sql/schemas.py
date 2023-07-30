@@ -4,14 +4,13 @@ from pydantic import BaseModel
 class ChatDialogueBase(BaseModel):
     session_id: str
     content: str
-    role: str
 
 
 class ChatDialogueCreate(ChatDialogueBase):
-    pass
+    role: str
 
 
-class ChatDialogue(ChatDialogueBase):
+class ChatDialogue(ChatDialogueCreate):
     sequence: int
 
     class Config:

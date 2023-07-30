@@ -2,11 +2,13 @@ import os
 import openai
 from typing import List
 from application.main.config import settings
-from application.main.database.sql.schemas import ChatDialogueCreate
+from application.main.database.sql.schemas import ChatDialogueCreate, ChatDialogueBase
 from application.main.database.sql import crud
 from sqlalchemy.orm import Session
+from application.initializer import LoggerInstance
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
+logger = LoggerInstance().get_logger(__name__)
 
 class ConversationalChatService(object):
 
@@ -22,9 +24,16 @@ class ConversationalChatService(object):
             max_results=self.num_previous_dialogues)[::-1]
         for dialogue in message_history:
             message = {"role": dialogue.role, "content": dialogue.content}
+            logger.debug("Chat history: session ID = %s, role = %s, message = %s", user_dialogue.session_id, dialogue.role, dialogue.content)
+
             messages.append(message)
 
         return messages
+
+
+    def save_user_dialouge(self, db: Session, session_id: str, user_input: str):
+        user_dialogue = ChatDialogueCreate(session_id=session_id, role="user", content=user_input)
+        crud.create_chat_dialogue(db, user_dialogue)
 
 
     def save_assistant_response(self, db: Session, session_id: str, assistant_response: str):
@@ -32,7 +41,9 @@ class ConversationalChatService(object):
         crud.create_chat_dialogue(db, assistant_dialogue)
 
 
-    def get_assistant_response(self, db: Session, model: str, user_dialogue: ChatDialogueCreate) -> str:
+    def get_assistant_response(self, db: Session, model: str, user_dialogue: ChatDialogueBase) -> str:
+        self.save_user_dialouge(session_id=user_dialogue.session_id, user_input=user_dialogue.content)
+
         messages = self.construct_chat_dialogue(db, user_dialogue)
 
         response = openai.ChatCompletion.create(model=model, messages=messages)
