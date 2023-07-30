@@ -8,12 +8,6 @@ from pydantic import BaseSettings, Field, BaseModel
 class AppConfig(BaseModel):
     """Application configurations."""
 
-    VAR_A: int = 33
-    VAR_B: float = 22.0
-
-    # question classification settings
-    SPACY_MODEL_IN_USE: str = "en_core_web_sm"
-
     # all the directory level information defined at app config level
     # we do not want to pollute the env level config with these information
     # this can change on the basis of usage
@@ -25,17 +19,6 @@ class AppConfig(BaseModel):
 
     LOGS_DIR: Path = BASE_DIR.joinpath('logs')
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
-
-    MODELS_DIR: Path = BASE_DIR.joinpath('models')
-    MODELS_DIR.mkdir(parents=True, exist_ok=True)
-
-    # local cache directory to store images or text file
-    CACHE_DIR: Path = BASE_DIR.joinpath('cache')
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-
-    # question classification model to use
-    CLASSIFICATION_MODEL: Path = MODELS_DIR.joinpath(
-        'question_classification.sav')
 
     # ChatGPT conversational API config
     NUM_PREVIOUS_DIALOGUES: int = 5 # only use previous 5 dialogues to generate new responses
@@ -67,10 +50,6 @@ class GlobalConfig(BaseSettings):
     LOG_LEVEL: Optional[str] = None
 
     DB: Optional[str] = None
-
-    MOBILENET_V2: Optional[str] = None
-    INCEPTION_V3: Optional[str] = None
-
 
     class Config:
         """Loads the dotenv file."""

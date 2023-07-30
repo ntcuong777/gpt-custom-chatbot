@@ -1,12 +1,8 @@
 fastapi
 uvicorn
-nltk
 pandas
 numpy
 python-dotenv
-spacy
-wordninja
-contractions
 streamlit
 pyyaml
 cutelog
