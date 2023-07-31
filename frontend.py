@@ -9,10 +9,21 @@ from dotenv import load_dotenv, find_dotenv
 MAX_DIALOGUE_TURNS = 20
 FASTAPI_SERVER_PORT = 8000
 FASTAPI_SERVER_API_PATH = "http://127.0.0.1:" + str(FASTAPI_SERVER_PORT) + "/api/v1"
-OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
+OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4"]
 DEFAULT_OPENAI_MODEL_INDEX = 0
-DEFAULT_DUMMY_ASSISTANT_RESPONE = "testing response"
+DEFAULT_DUMMY_ASSISTANT_RESPONE = "dummy response"
 ################ END   : Global constants ################
+
+
+################ BEGIN : Initialization steps ################
+def init_streamlit_page_config():
+    st.set_page_config(
+        page_title="ChatGPT-like app",
+        page_icon="🤖",
+        layout="centered",
+        initial_sidebar_state="expanded"
+    )
+
 
 def initialize_app_states():
     # initialize "messages" session_state to save dialogue history
@@ -33,7 +44,6 @@ def get_user_session():
         request_path = FASTAPI_SERVER_API_PATH + "/user_session"
         response = requests.get(request_path)
         json_response = response.json()
-        print(json_response)
         st.session_state["session_id"] = json_response["session_id"] if "session_id" in json_response else None
     except ConnectionError:
         print("Cannot connect to server!!!")
@@ -47,13 +57,22 @@ def ensure_short_dialogue_history():
         st.session_state.messages = st.session_state.messages[-MAX_DIALOGUE_TURNS:]
 
 
+def app_initialization():
+    init_streamlit_page_config()
+    initialize_app_states()
+    get_user_session()
+    ensure_short_dialogue_history()
+
+################ END   : Initialization steps ################
+
+
+################ BEGIN : Querying steps ################
 def get_assistant_response(user_message):
     def save_user_dialogue():
         try:
             request_path = FASTAPI_SERVER_API_PATH + "/conversational/"
             request_body = {"session_id": st.session_state.session_id, "content": user_message}
-            response = requests.post(request_path, data=request_body)
-            print(response.json())
+            requests.post(request_path, json=request_body)
         except ConnectionError:
             print("Cannot connect to server!!!")
         except JSONDecodeError:
@@ -68,12 +87,11 @@ def get_assistant_response(user_message):
                 + "/" + st.session_state.session_id
             response = requests.get(request_path)
             json_response = response.json()
-            print(json_response)
             return json_response["assistant_response"] if "assistant_response" in json_response else DEFAULT_DUMMY_ASSISTANT_RESPONE
         except ConnectionError:
             print("Cannot connect to server!!!")
         except JSONDecodeError:
-            print("No valid session_id response")
+            print("No valid assistant response")
         except:
             print("Server error!!!")
 
@@ -83,7 +101,10 @@ def get_assistant_response(user_message):
     save_user_dialogue()
     return get_assistant_response()
 
+################ END   : Querying steps ################
 
+
+################ BEGIN : Rendering steps ################
 def render_chatbox():
     # Render previous history
     for message in st.session_state.messages:
@@ -98,7 +119,7 @@ def render_chatbox():
 
         with st.chat_message("assistant"):
             message_placeholder = st.empty()
-            full_response = get_assistant_response({"role": "user", "content": prompt})
+            full_response = get_assistant_response(prompt)
             tmp_response = ""
             for i in range(len(full_response)):
                 tmp_response += full_response[i]
@@ -120,13 +141,12 @@ def render_frontend():
     # Chat box
     render_chatbox()
 
+################ END   : Rendering steps ################
+
 
 if __name__ == "__main__":
     load_dotenv(find_dotenv())
     MAX_DIALOGUE_TURNS = int(os.environ.get("STREAMLIT_MAX_DIALOGUE_TURNS", 20))
 
-    initialize_app_states()
-    get_user_session()
-    ensure_short_dialogue_history()
-
+    app_initialization()
     render_frontend()
