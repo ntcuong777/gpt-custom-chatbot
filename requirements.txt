@@ -9,3 +9,4 @@ cutelog
 python-multipart
 sqlalchemy
 openai
+scipy

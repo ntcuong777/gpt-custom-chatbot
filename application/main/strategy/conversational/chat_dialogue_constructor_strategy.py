@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from application.main.config import settings
 from application.initializer import LoggerInstance
 from application.main.database.sql import crud
+from application.main.decorator import overrides
 
 
 logger = LoggerInstance().get_logger(__name__)
@@ -25,6 +26,7 @@ class SimpleChatDialogueConstructorStrategy(AbstractChatDialogueConstructorStrat
         self.num_previous_dialogues = settings.APP_CONFIG.NUM_PREVIOUS_DIALOGUES
 
 
+    @overrides(AbstractChatDialogueConstructorStrategy)
     def construct_chat_dialogue(self, db: Session, session_id: str) -> List[Dict]:
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}

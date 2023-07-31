@@ -20,12 +20,12 @@ class ConversationalChatService(object):
 
     def save_user_dialouge(self, db: Session, session_id: str, user_input: str):
         user_dialogue = ChatDialogueCreate(session_id=session_id, role="user", content=user_input)
-        return crud.create_chat_dialogue(db, user_dialogue)
+        return crud.ChatDialogueCrud.create_chat_dialogue(db, user_dialogue)
 
 
     def save_assistant_response(self, db: Session, session_id: str, assistant_response: str) -> models.ChatDialogue:
         assistant_dialogue = ChatDialogueCreate(session_id=session_id, role="assistant", content=assistant_response)
-        return crud.create_chat_dialogue(db, assistant_dialogue)
+        return crud.ChatDialogueCrud.create_chat_dialogue(db, assistant_dialogue)
 
 
     def get_assistant_response(self, db: Session, model: str, session_id: str) -> str:
