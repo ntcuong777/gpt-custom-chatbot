@@ -17,7 +17,7 @@ class AbstractChatDialogueConstructorStrategy(ABC):
     """
     @abstractmethod
     def construct_chat_dialogue(self, db: Session, session_id: str) -> List[Dict]:
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 class SimpleChatDialogueConstructorStrategy(AbstractChatDialogueConstructorStrategy):
