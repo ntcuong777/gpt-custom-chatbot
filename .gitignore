@@ -152,3 +152,6 @@ api_template/logs/fast_api.log
 !/.idea/
 /api_template/logs/
 /api_template/models/
+
+# SQLite DB extension
+*.db
