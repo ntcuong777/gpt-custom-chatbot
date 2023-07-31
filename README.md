@@ -1,7 +1,7 @@
 # DIY ChatGPT-like app 🚀
 ## Table of Contents
-1. [Install necessary libraries](#install-necessary-libraries)
-2. [Running Locally? 📍](#running-locally-📍)
+1. [Install necessary libraries](#installlibs)
+2. [Running Locally? 📍](#runlocal)
     1. [Setting OpenAI API key](#setting-openai-api-key)
         1. [Windows setup](#windows-setup)
         2. [Linux / MacOS setup](#linux--macos-setup)
