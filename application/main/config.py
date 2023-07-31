@@ -21,7 +21,7 @@ class AppConfig(BaseModel):
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
     # ChatGPT conversational API config
-    NUM_PREVIOUS_DIALOGUES: int = 7 # only use previous 5 dialogues to generate new responses
+    NUM_PREVIOUS_DIALOGUES: int = 10 # only use previous 5 dialogues to generate new responses
 
 
 class GlobalConfig(BaseSettings):

@@ -17,8 +17,8 @@ def count_dialogues_given_session_id(db: Session, session_id: str):
 
 def create_chat_dialogue(db: Session, dialogue: schemas.ChatDialogueCreate):
     new_sequence = count_dialogues_given_session_id(db, dialogue.session_id) + 1
-    db_chat_history = models.ChatDialogue(session_id=dialogue.session_id, sequence=new_sequence, role=dialogue.role, content=dialogue.content)
-    db.add(db_chat_history)
+    db_chat_dialogue = models.ChatDialogue(session_id=dialogue.session_id, sequence=new_sequence, role=dialogue.role, content=dialogue.content)
+    db.add(db_chat_dialogue)
     db.commit()
-    db.refresh(db_chat_history)
-    return db_chat_history
+    db.refresh(db_chat_dialogue)
+    return db_chat_dialogue
