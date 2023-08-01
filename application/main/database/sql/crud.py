@@ -51,3 +51,12 @@ class DocumentCrud:
             raise MultipleResultsFound()
         else:
             return results[0]
+
+
+    @staticmethod
+    def create_document_without_embeddings(db: Session, session_id: str, doc_content: str) -> models.Document:
+        doc = models.Document(session_id=session_id, doc_content=doc_content)
+        db.add(doc)
+        db.commit()
+        db.refresh(doc)
+        return doc

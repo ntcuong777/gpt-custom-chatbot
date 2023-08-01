@@ -10,6 +10,8 @@ from application.main.decorator import overrides
 from scipy import spatial  # for calculating vector similarities for search
 
 
+DEFAULT_EMBEDDING_MODEL = "text-embedding-ada-002"
+
 logger = LoggerInstance().get_logger(__name__)
 
 class AbstractDocQAProcessorStrategy(ABC):
@@ -29,8 +31,7 @@ class AbstractDocQAProcessorStrategy(ABC):
 class SimpleDocQAProcessorStrategy(AbstractDocQAProcessorStrategy):
     @overrides(AbstractDocQAProcessorStrategy)
     def save_referenced_doc(self, db: Session, session_id: str, doc_content: str) -> str:
-        # TODO: save doc_content to database
-        pass
+        crud.DocumentCrud.create_document_without_embeddings(db, session_id=session_id, doc_content=doc_content)
 
 
     @overrides(AbstractDocQAProcessorStrategy)
@@ -48,7 +49,7 @@ class TopKRelevantDocQAProcessorStrategy(AbstractDocQAProcessorStrategy):
 
     @overrides(AbstractDocQAProcessorStrategy)
     def save_referenced_doc(self, db: Session, session_id: str, doc_content: str) -> str:
-        # TODO: save doc_content to database and initialize embeddings by splitting doc_content
+        # TODO: save doc_content to database and initialize embeddings by splitting doc_content into multiple small parts
         pass
 
 
@@ -73,9 +74,14 @@ class TopKRelevantDocQAProcessorStrategy(AbstractDocQAProcessorStrategy):
         return indices[:self.top_k], texts[:self.top_k], relatednesses[:self.top_k]
 
 
+    def __get_text_embedding_from_openai(self, text: str, model: str = DEFAULT_EMBEDDING_MODEL):
+        text = text.replace("\n", " ")
+        return openai.Embedding.create(input = [text], model=model)['data'][0]['embedding']
+
+
     @overrides(AbstractDocQAProcessorStrategy)
     def construct_referenced_doc(self, db: Session, session_id: str, question: str) -> str:
-        question_embeddings = [] # TODO: request `question` embeddings from OpenAI
+        question_embeddings = self.__get_text_embedding_from_openai(question)
 
         doc = crud.DocumentCrud.fetch_single_document_given_session_id_eagerly_fetch_embeddings(db, session_id)
         doc_parts = [embedding.doc_part for embedding in doc.embeddings]
