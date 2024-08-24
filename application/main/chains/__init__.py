@@ -1,6 +1,5 @@
 import os
 
-from typing import Optional
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnableConfig, RunnableLambda
 from langchain_core.output_parsers import StrOutputParser

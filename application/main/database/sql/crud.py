@@ -13,7 +13,8 @@ class ChatDialogueCrud:
     def fetch_all_dialogues_given_session_id(db: Session, session_id: str, max_results: int = 100) -> List[models.ChatDialogue]:
         query = select(models.ChatDialogue).where(models.ChatDialogue.session_id == session_id)\
             .order_by(models.ChatDialogue.sequence.desc()).limit(max_results)
-        return db.scalars(query).all()
+        dialogues = db.scalars(query).all()
+        return dialogues[::-1]  # reverse the order to show the latest dialogue at the bottom
 
     @staticmethod
     def count_dialogues_given_session_id(db: Session, session_id: str) -> int:
