@@ -17,6 +17,8 @@ class ChatSessionCreate(ChatSessionBase):
 
 
 class ChatSession(ChatSessionBase):
+    system_message: str
+
     class Config:
         from_attributes = True
 

@@ -10,3 +10,8 @@ class ModelRequestBody(BaseModel):
 class NewSessionBody(BaseModel):
     model: str = Field(..., description="Model name", alias="model")
     user_id: str = Field("anonymous", description="User ID", alias="user_id")
+
+
+class UpdateSysMsgBody(BaseModel):
+    session_id: str = Field(..., description="Session ID", alias="session_id")
+    system_message: str = Field(..., description="System message", alias="system_message")

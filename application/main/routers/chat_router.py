@@ -39,7 +39,7 @@ async def conversational_chat(
 ):
     model = req_body.model  # TODO: include params
     chat_service.save_user_dialouge(db, session_id=session_id, user_input=req_body.user_query)
-    assistant_response = chat_service.get_assistant_response(db, session_id, model=model)
+    assistant_response = chat_service.get_assistant_response(db, session_id, model=model, **req_body.llm_params)
     return {"assistant_response": assistant_response}
 
 
@@ -54,7 +54,7 @@ async def stream_conversational_chat(
     service.save_user_dialouge(db, session_id=session_id, user_input=req_body.user_query)
 
     async def iter_response() -> AsyncIterator[bytes | str]:
-        async for chunk in service.aget_assistant_response(db, session_id, model=model):
+        async for chunk in service.aget_assistant_response(db, session_id, model=model, **req_body.llm_params):
             resp_chunk = json.dumps({"assistant_response": chunk}, ensure_ascii=False)
             yield resp_chunk
 

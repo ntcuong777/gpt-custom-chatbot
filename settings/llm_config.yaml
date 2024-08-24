@@ -1,160 +1,360 @@
+# Note on `pricing`:
+# - `prompt` is the cost per 1M tokens (in USD)
+# - `completion` is the cost per 1M tokens (in USD)
+# - `image` is the cost per 1K image (in USD)
+# - `request` is the cost per 1K requests (in USD)
+#
+# TODO: Find a way to automatically update the pricing and parameters for the models
+parameters:
+  - id: temperature
+    type: float
+    name: Temperature
+    description: |
+      This setting influences the variety in the model's responses. Lower values lead to more predictable and typical responses, 
+      while higher values encourage more diverse and less common responses. At 0, the model always gives the same response for a given input.
+    min: 0
+    max: 2
+    default: 1
+    openrouter_only: false
+  - id: top_p
+    type: float
+    name: Top-P
+    description: |
+      This setting limits the model's choices to a percentage of likely tokens: only the top tokens whose probabilities add up to P. 
+      A lower value makes the model's responses more predictable, while the default setting allows for a full range of token choices. 
+      Think of it like a dynamic Top-K.
+    min: 0
+    max: 1
+    default: 1
+    openrouter_only: false
+  - id: top_k
+    type: int
+    name: Top-K
+    description: |
+      This limits the model's choice of tokens at each step, making it choose from a smaller set. 
+      A value of 1 means the model will always pick the most likely next token, leading to predictable results. 
+      By default this setting is disabled, making the model to consider all choices.
+    min: 0
+    max:
+    default: 0
+    openrouter_only: true
+  - id: frequency_penalty
+    type: float
+    name: Frequency Penalty
+    description: |
+      This setting aims to control the repetition of tokens based on how often they appear in the input. 
+      It tries to use less frequently those tokens that appear more in the input, proportional to how frequently they occur. 
+      Token penalty scales with the number of occurrences. Negative values will encourage token reuse.
+    min: -2
+    max: 2
+    default: 0
+    openrouter_only: false
+  - id: presence_penalty
+    type: float
+    name: Presence Penalty
+    description: |
+      Adjusts how often the model repeats specific tokens already used in the input. 
+      Higher values make such repetition less likely, while negative values do the opposite. 
+      Token penalty does not scale with the number of occurrences. Negative values will encourage token reuse.
+    min: -2
+    max: 2
+    default: 0
+    openrouter_only: false
+  - id: repetition_penalty
+    type: float
+    name: Repetition Penalty
+    description: |
+      Helps to reduce the repetition of tokens from the input. A higher value makes the model less likely to repeat tokens, 
+      but too high a value can make the output less coherent (often with run-on sentences that lack small words). 
+      Token penalty scales based on original token's probability.
+    min: 0
+    max: 2
+    default: 1
+    openrouter_only: true
+  - id: min_p
+    type: float
+    name: Min-P
+    description: |
+      Represents the minimum probability for a token to be considered, relative to the probability of the most likely token. 
+      (The value changes depending on the confidence level of the most probable token.) 
+      If your Min-P is set to 0.1, that means it will only allow for tokens that are 
+      at least 1/10th as probable as the best possible option.
+    min: 0
+    max: 1
+    default: 0
+    openrouter_only: true
+  - id: top_a
+    type: float
+    name: Top-A
+    description: |
+      Consider only the top tokens with "sufficiently high" probabilities based on the probability of the most likely token. 
+      Think of it like a dynamic Top-P. A lower Top-A value focuses the choices based on the highest probability token but with a narrower scope. 
+      A higher Top-A value does not necessarily affect the creativity of the output, but rather refines the filtering process based on the maximum probability.
+    min: 0
+    max: 1
+    default: 0
+    openrouter_only: true
+  - id: max_tokens
+    type: int
+    name: Max Tokens
+    description: |
+      The maximum number of tokens the model can generate in a single request. 
+      This setting can help to control the length of the model's responses.
+    min: 1
+    max:
+    default: 4096
+    openrouter_only: false
+  - id: providers
+    type: dict
+    name: Providers
+    description: |
+      The providers config for OpenRouter. Only applicable for OpenRouter APIs.
+      For more information, visit: [Provider routing](https://openrouter.ai/docs/provider-routing)
+    default:
+      order:
+        - OpenAI
+        - Anthropic
+        - DeepInfra
+        - Hyperbolic
+        - Together
+        - NovitaAI
+        - Lepton
+        - AI21
+      allow_fallbacks: true
+    openrouter_only: true
+
 llm_models:
   chat_models:
     - id: "nousresearch/hermes-3-llama-3.1-405b"
       name: "Hermes 3-405B (Free)"
-      cost:
-        input: 0
-        output: 0
+      pricing:
+        prompt: 0
+        completion: 0
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "nousresearch/hermes-3-llama-3.1-405b:extended"
       name: "Hermes 3-405B - Extended (Free)"
-      cost:
-        input: 0
-        output: 0
+      pricing:
+        prompt: 0
+        completion: 0
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "nousresearch/hermes-3-llama-3.1-70b"
-      name: "Hermes 3-70B (Free)"
-      cost:
-        input: 0
-        output: 0
+      name: "Hermes 3-70B"
+      pricing:
+        prompt: 0.4
+        completion: 0.4
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "meta-llama/llama-3.1-8b-instruct:free"
       name: "Meta: Llama 3.1 8B Instruct (Free)"
-      cost:
-        input: 0
-        output: 0
+      pricing:
+        prompt: 0
+        completion: 0
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "meta-llama/llama-3.1-70b-instruct"
       name: "Meta: Llama 3.1 70B Instruct"
-      cost:
-        input: 0.35
-        output: 0.4
+      pricing:
+        prompt: 0.35
+        completion: 0.4
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "mistralai/mixtral-8x22b-instruct"
       name: "Mixtral 8x22B"
-      cost:
-        input: 0.65
-        output: 0.65
+      pricing:
+        prompt: 0.65
+        completion: 0.65
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "anthropic/claude-3-haiku"
       name: "Claude 3 Haiku"
-      cost:
-        input: 0.25
-        output: 1.25
-        imgs: 0.4
+      pricing:
+        prompt: 0.25
+        completion: 1.25
+        image: 0.4
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "openai/gpt-4o-mini-2024-07-18"
       name: "GPT-4o-mini"
-      cost:
-        input: 0.15
-        output: 0.6
-        imgs: 7.225
+      pricing:
+        prompt: 0.15
+        completion: 0.6
+        image: 7.225
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "meta-llama/llama-3.1-405b-instruct"
       name: "Meta: Llama 3.1 405B Instruct"
-      cost:
-        input: 2.7
-        output: 2.7
+      pricing:
+        prompt: 2.7
+        completion: 2.7
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "mistralai/mistral-large"
       name: "Mixtral Large"
-      cost:
-        input: 3
-        output: 9
+      pricing:
+        prompt: 3
+        completion: 9
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "openai/gpt-4o-2024-08-06"
       name: "GPT-4o"
-      cost:
-        input: 2.5
-        output: 10
-        imgs: 3.613
+      pricing:
+        prompt: 2.5
+        completion: 10
+        image: 3.613
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
+    - id: "openai/chatgpt-4o-latest"
+      name: "ChatGPT-4o"
+      pricing:
+        prompt: 5
+        completion: 15
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "anthropic/claude-3.5-sonnet"
       name: "Claude 3.5 Sonnet"
-      cost:
-        input: 3
-        output: 15
-        imgs: 4.8
+      pricing:
+        prompt: 3
+        completion: 15
+        image: 4.8
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "openai/gpt-4o:extended"
       name: "GPT-4o - Extended"
-      cost:
-        input: 6
-        output: 18
-        imgs: 7.225
+      pricing:
+        prompt: 6
+        completion: 18
+        image: 7.225
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "anthropic/claude-3-opus"
       name: "Claude 3 Opus"
-      cost:
-        input: 15
-        output: 75
-        imgs: 24
+      pricing:
+        prompt: 15
+        completion: 75
+        image: 24
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "gpt-3.5-turbo"
       name: "GPT-3.5 (Direct)"
-      cost:
-        input: 3
-        output: 6
+      pricing:
+        prompt: 3
+        completion: 6
       base_url: "${OPENAI_API_URL}"
       api_key: "${OPENAI_API_KEY}"
+      usage_mode: advanced
     - id: "gpt-3.5-turbo-16k"
       name: "GPT-3.5 16k (Direct)"
-      cost:
-        input: 3
-        output: 6
+      pricing:
+        prompt: 3
+        completion: 6
       base_url: "${OPENAI_API_URL}"
       api_key: "${OPENAI_API_KEY}"
+      usage_mode: advanced
     - id: "gpt-4o-2024-08-06"
       name: "GPT-4o (Direct)"
-      cost:
-        input: 3.75
-        output: 15
+      pricing:
+        prompt: 3.75
+        completion: 15
       base_url: "${OPENAI_API_URL}"
       api_key: "${OPENAI_API_KEY}"
+      usage_mode: advanced
     - id: "gpt-4o-mini-2024-07-18"
       name: "GPT-4o Mini (Direct)"
-      cost:
-        input: 0.3
-        output: 1.2
+      pricing:
+        prompt: 0.3
+        completion: 1.2
       base_url: "${OPENAI_API_URL}"
       api_key: "${OPENAI_API_KEY}"
+    - id: "01-ai/yi-1.5-34b-chat"
+      name: "Yi 1.5 34B Chat"
+      pricing:
+        prompt: 0.72
+        completion: 0.72
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
+    - id: "qwen/qwen-2-72b-instruct"
+      name: "Qwen 2 72B Instruct"
+      pricing:
+        prompt: 0.35
+        completion: 0.4
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
+    - id: "phind/phind-codellama-34b"
+      name: "Phind: CodeLlama 34B v2"
+      pricing:
+        prompt: 0.72
+        completion: 0.72
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
+    - id: "perplexity/llama-3.1-sonar-large-128k-chat"
+      name: "Perplexity: Sonar 70B"
+      pricing:
+        prompt: 1
+        completion: 1
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
+    - id: "cognitivecomputations/dolphin-mixtral-8x22b"
+      name: "Dolphin 2.9.2 Mixtral 8x22B 🐬"
+      pricing:
+        prompt: 0.9
+        completion: 0.9
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
+    - id: "ai21/jamba-1-5-large"
+      name: "AI21: Jamba 1.5 Large"
+      pricing:
+        prompt: 2
+        completion: 8
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
 
   search_models:
     - id: "perplexity/llama-3.1-sonar-small-128k-chat"
       name: "Perplexity: Sonar 8B"
-      cost:
-        input: 5
-        output: 5
-        reqs: 5
+      pricing:
+        prompt: 5
+        completion: 5
+        request: 5
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: advanced
     - id: "perplexity/llama-3.1-sonar-large-128k-online"
       name: "Perplexity: Sonar 70B"
-      cost:
-        input: 5
-        output: 5
-        reqs: 5
+      pricing:
+        prompt: 5
+        completion: 5
+        request: 5
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"
+      usage_mode: simple
     - id: "perplexity/llama-3.1-sonar-huge-128k-online"
       name: "Perplexity: Sonar 405B"
-      cost:
-        input: 5
-        output: 5
-        reqs: 5
+      pricing:
+        prompt: 5
+        completion: 5
+        request: 5
       base_url: "${OPENROUTER_API_URL}"
       api_key: "${OPENROUTER_API_KEY}"

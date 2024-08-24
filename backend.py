@@ -37,6 +37,7 @@ app = get_application()
 async def app_shutdown():
     # on app shutdown do something probably close some connections or trigger some event
     print("On App Shutdown i will be called.")
+    # stop scheduler thread
     scheduler_thread.set()
 
 

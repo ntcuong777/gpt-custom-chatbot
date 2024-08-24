@@ -1,6 +1,6 @@
 import streamlit as st
 
-from .common import ensure_short_dialogue_history
+from .ui_common import ensure_short_dialogue_history
 
 
 def init_streamlit_page_config():

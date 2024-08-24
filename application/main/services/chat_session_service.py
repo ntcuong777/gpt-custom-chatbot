@@ -29,6 +29,10 @@ class ChatSessionService(BaseService):
         chat_session = ChatSessionCreate(session_id=session_id, user_id=user_id, model=model)
         return crud.ChatSessionCrud.create_chat_session(db, chat_session)
 
+    def set_system_message(self, db: Session, session_id: str, system_message: str) -> models.ChatSession:
+        chat_session = crud.ChatSessionCrud.update_chat_session_system_message(db, session_id, system_message)
+        return chat_session
+
 
 # Dependency
 def get_chat_session_service():

@@ -39,6 +39,7 @@ class ChatSession(BaseDbModel):
     session_id: Mapped[str] = Column(String, index=True, nullable=False, unique=True)
     user_id: Mapped[str] = Column(String, index=True, default="anonymous")
     model: Mapped[str] = Column(String, nullable=False)
+    system_message: Mapped[str] = Column(String, nullable=True)
 
 
 class ChatDialogue(BaseDbModel):

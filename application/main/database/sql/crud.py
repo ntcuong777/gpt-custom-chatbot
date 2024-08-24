@@ -1,4 +1,6 @@
 from typing import List
+
+from aiohttp.web_routedef import static
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import select, func
 from sqlalchemy.exc import MultipleResultsFound
@@ -94,3 +96,11 @@ class ChatSessionCrud:
             db.delete(session)
         db.commit()
         return
+
+    @staticmethod
+    def update_chat_session_system_message(db: Session, session_id: str, system_message: str) -> models.ChatSession:
+        chat_session = ChatSessionCrud.fetch_single_session_given_id(db, session_id)
+        chat_session.system_message = system_message
+        db.commit()
+        db.refresh(chat_session)
+        return chat_session

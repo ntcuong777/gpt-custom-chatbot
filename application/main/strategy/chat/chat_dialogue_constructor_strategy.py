@@ -6,8 +6,10 @@ from application.initializer import LoggerInstance
 from application.main.database.sql import crud
 from application.main.decorator import overrides
 
+from datetime import datetime
 
 logger = LoggerInstance().get_logger(__name__)
+_time_str = f"* Today is {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} (UTC)"
 
 
 class AbstractChatDialogueConstructorStrategy(ABC):
@@ -27,9 +29,12 @@ class SimpleChatDialogueConstructorStrategy(AbstractChatDialogueConstructorStrat
 
     @overrides(AbstractChatDialogueConstructorStrategy)
     def construct_chat_dialogue(self, db: Session, session_id: str) -> List[Dict]:
-        messages = [
-            {"role": "system", "content": "You are a helpful assistant."}
-        ]
+        global _time_str
+
+        messages = [{"role": "system", "content": f"You are a helpful assistant.\n\n{_time_str}"}]
+        chat_session = crud.ChatSessionCrud.fetch_single_session_given_id(db, session_id)
+        if chat_session.system_message:
+            messages = [{"role": "system", "content": f"{chat_session.system_message}\n\n\n{_time_str}"}]
         message_history = crud.ChatDialogueCrud.fetch_all_dialogues_given_session_id(
             db, session_id=session_id, max_results=self.num_previous_dialogues)
         for dialogue in message_history:
