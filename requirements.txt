@@ -9,3 +9,6 @@ cutelog
 python-multipart
 sqlalchemy
 openai
+scipy
+textract
+tiktoken
