@@ -6,8 +6,8 @@ class LoggerInstance(object):
 
 class IncludeAPIRouter(object):
     def __new__(cls):
-        from application.main.routers.conversational_chat import router as router_conversational_chat
-        from application.main.routers.session_generator import router as router_session_generator
+        from application.main.routers.chat_router import router as router_conversational_chat
+        from application.main.routers.session_router import router as router_session_generator
         from fastapi.routing import APIRouter
 
         router = APIRouter()

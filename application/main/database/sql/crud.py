@@ -55,3 +55,42 @@ class DocumentCrud:
         db.commit()
         db.refresh(doc)
         return doc
+
+
+class ChatSessionCrud:
+    @staticmethod
+    def fetch_single_session_given_id(db: Session, session_id: str) -> models.ChatSession | None:
+        query = select(models.ChatSession).where(models.ChatSession.session_id == session_id)
+        results = db.scalars(query).all()
+        if len(results) > 1:
+            raise MultipleResultsFound()
+        elif len(results) > 0:
+            return results[0]
+        else:
+            return None
+
+    @staticmethod
+    def create_chat_session(db: Session, chat_session: schemas.ChatSessionCreate) -> models.ChatSession:
+        chat_session = models.ChatSession(session_id=chat_session.session_id, user_id=chat_session.user_id, model=chat_session.model)
+        db.add(chat_session)
+        db.commit()
+        db.refresh(chat_session)
+        return chat_session
+
+    @staticmethod
+    def delete_stale_chat_sessions(db: Session, days: int):
+        query = select(models.ChatSession).where(models.ChatSession.created_at < func.now() - func.interval(days, "day"))
+        stale_sessions = db.scalars(query).all()
+        for session in stale_sessions:
+            db.delete(session)
+        db.commit()
+        return
+
+    @staticmethod
+    def delete_empty_chat_sessions(db: Session):
+        query = select(models.ChatSession).join(models.ChatDialogue).group_by(models.ChatSession.session_id).having(func.count(models.ChatDialogue.id) == 0)
+        empty_sessions = db.scalars(query).all()
+        for session in empty_sessions:
+            db.delete(session)
+        db.commit()
+        return

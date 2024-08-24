@@ -6,6 +6,8 @@ from dotenv import load_dotenv, find_dotenv
 from application.initializer import IncludeAPIRouter, SqlDatabaseInitializer
 from common.config import settings
 
+from application.main.scheduled_jobs.init_jobs import scheduler_thread
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -35,6 +37,7 @@ app = get_application()
 async def app_shutdown():
     # on app shutdown do something probably close some connections or trigger some event
     print("On App Shutdown i will be called.")
+    scheduler_thread.set()
 
 
 # uvicorn.run("backend:app", host=settings.HOST, port=settings.PORT, log_level=settings.LOG_LEVEL, use_colors=True,reload=True)

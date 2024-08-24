@@ -1,10 +1,11 @@
 import time
 import streamlit as st
 
-from .query import get_assistant_response, stream_assistant_response
+from .common import get_user_session, ensure_short_dialogue_history
+from .api_queries import get_assistant_response, stream_assistant_response
 from common.constants import *
 from common.config import settings
-from frontend.events import on_selection_change
+from frontend.ui_events import on_selection_change
 
 
 def render_chatbox():
@@ -41,8 +42,10 @@ def render_chatbox():
 
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
+    ensure_short_dialogue_history()
 
-def render_frontend():
+
+def render_chat_interface():
     st.title("ChatGPT-like clone")
 
     # value of the selected model is saved in st.session_state["llm_model"]
@@ -54,4 +57,5 @@ def render_frontend():
     )
 
     # Chat box
+    get_user_session()
     render_chatbox()

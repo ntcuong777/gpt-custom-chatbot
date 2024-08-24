@@ -2,7 +2,6 @@ import json
 
 from typing import AsyncIterator
 
-from aiohttp.web_response import Response
 from fastapi.routing import APIRouter
 from fastapi import Depends
 from fastapi.responses import StreamingResponse
@@ -10,12 +9,12 @@ from sqlalchemy.orm import Session
 
 from application.main.database.sql.sqlite import get_db_session
 from application.main.database.sql.schemas import ChatDialogueBase, ChatDialogue
-from application.main.services.conversational_chat_service import get_conversational_chat_service, ConversationalChatService
+from application.main.services.chat_service import get_conversational_chat_service, ConversationalChatService
 from application.initializer import LoggerInstance
 
-from ._chat_commons import ModelRequestBody
+from ._router_models import ModelRequestBody
 
-router = APIRouter(prefix='/conversational')
+router = APIRouter(prefix='/chat')
 logger = LoggerInstance().get_logger(__name__)
 
 
@@ -36,11 +35,11 @@ async def conversational_chat(
         session_id: str,
         req_body: ModelRequestBody,
         db: Session = Depends(get_db_session),
-        service: ConversationalChatService = Depends(get_conversational_chat_service)
+        chat_service: ConversationalChatService = Depends(get_conversational_chat_service)
 ):
     model = req_body.model  # TODO: include params
-    service.save_user_dialouge(db, session_id=session_id, user_input=req_body.user_query)
-    assistant_response = service.get_assistant_response(db, session_id, model=model)
+    chat_service.save_user_dialouge(db, session_id=session_id, user_input=req_body.user_query)
+    assistant_response = chat_service.get_assistant_response(db, session_id, model=model)
     return {"assistant_response": assistant_response}
 
 

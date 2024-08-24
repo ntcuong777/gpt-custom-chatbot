@@ -2,14 +2,34 @@ from pydantic import BaseModel
 from typing import List
 
 
+class BaseDbModel(BaseModel):
+    pass
+
+
+class ChatSessionBase(BaseDbModel):
+    session_id: str
+    user_id: str = "anonymous"
+    model: str
+
+
+class ChatSessionCreate(ChatSessionBase):
+    pass
+
+
+class ChatSession(ChatSessionBase):
+    class Config:
+        from_attributes = True
+
+
 ################# START: Model for chat dialogue function #################
-class ChatDialogueBase(BaseModel):
+class ChatDialogueBase(BaseDbModel):
     session_id: str
     content: str
+    role: str
 
 
 class ChatDialogueCreate(ChatDialogueBase):
-    role: str
+    pass
 
 
 class ChatDialogue(ChatDialogueCreate):
@@ -23,12 +43,12 @@ class ChatDialogue(ChatDialogueCreate):
 
 ################# START: Model for document QA function #################
 # ----- Base model ------
-class DocumentBase(BaseModel):
+class DocumentBase(BaseDbModel):
     session_id: str
     doc_content: str
 
 
-class DocumentEmbeddingsBase(BaseModel):
+class DocumentEmbeddingsBase(BaseDbModel):
     doc_part: str
     doc_part_idx: int
     embedding_vector: str
@@ -53,8 +73,6 @@ class Document(DocumentCreate):
 
 
 class DocumentEmbeddings(DocumentEmbeddingsCreate):
-    id: int
-
     class Config:
         from_attributes = True
 

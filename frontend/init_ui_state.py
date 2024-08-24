@@ -1,7 +1,6 @@
 import streamlit as st
 
-from common.constants import MAX_DIALOGUE_TURNS
-from .common import get_user_session
+from .common import ensure_short_dialogue_history
 
 
 def init_streamlit_page_config():
@@ -27,14 +26,7 @@ def initialize_app_states():
     #     st.session_state.llm_model = ModelByCategory.all_models[DEFAULT_LLM_MODEL_ID]
 
 
-def ensure_short_dialogue_history():
-    if "messages" in st.session_state and len(st.session_state.messages) > MAX_DIALOGUE_TURNS:
-        # remove previous history to save resource
-        st.session_state.messages = st.session_state.messages[-MAX_DIALOGUE_TURNS:]
-
-
 def app_initialization():
     init_streamlit_page_config()
     initialize_app_states()
-    get_user_session()
     ensure_short_dialogue_history()

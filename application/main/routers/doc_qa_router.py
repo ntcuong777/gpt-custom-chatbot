@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from application.main.database.sql.sqlite import get_db_session
 from application.main.database.sql.schemas import DocumentCreate, DocumentBase
-from application.main.services.document_question_answering_service import get_document_question_answering_service, DocumentQuestionAnsweringService
+from application.main.services.doc_qa_service import get_document_question_answering_service, DocumentQuestionAnsweringService
 from application.initializer import LoggerInstance
 
 router = APIRouter(prefix='/doc_qa')

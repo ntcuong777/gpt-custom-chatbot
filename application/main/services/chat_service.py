@@ -10,19 +10,21 @@ from application.main.database.sql.schemas import ChatDialogueCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud
 from application.initializer import LoggerInstance
-from application.main.strategy.conversational import SimpleChatDialogueConstructorStrategy, AbstractChatDialogueConstructorStrategy
+from application.main.strategy.chat import SimpleChatDialogueConstructorStrategy, AbstractChatDialogueConstructorStrategy
+
+from .base_service import BaseService
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 logger = LoggerInstance().get_logger(__name__)
 
 
-class ConversationalChatService(object):
+class ConversationalChatService(BaseService):
     chat_dialogue_constructor_strategy: AbstractChatDialogueConstructorStrategy = None
 
     def __init__(self, chat_dialogue_constructor_strategy) -> None:
         self.chat_dialogue_constructor_strategy = chat_dialogue_constructor_strategy
 
-    def save_user_dialouge(self, db: Session, session_id: str, user_input: str):
+    def save_user_dialouge(self, db: Session, session_id: str, user_input: str) -> models.ChatDialogue:
         user_dialogue = ChatDialogueCreate(session_id=session_id, role="user", content=user_input)
         return crud.ChatDialogueCrud.create_chat_dialogue(db, user_dialogue)
 

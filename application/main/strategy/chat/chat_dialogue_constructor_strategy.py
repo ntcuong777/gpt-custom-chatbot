@@ -12,7 +12,7 @@ logger = LoggerInstance().get_logger(__name__)
 
 class AbstractChatDialogueConstructorStrategy(ABC):
     """
-    Using strategy pattern to make future app extension easier for conversational ChatGPT API.
+    Using strategy pattern to make future app extension easier for chat ChatGPT API.
     For example, we might choose to construct chat dialogue history by taking dialogues that are
     semantically equivalent for the current user chat message using OpenAI's embeddings API
     """
@@ -31,7 +31,7 @@ class SimpleChatDialogueConstructorStrategy(AbstractChatDialogueConstructorStrat
             {"role": "system", "content": "You are a helpful assistant."}
         ]
         message_history = crud.ChatDialogueCrud.fetch_all_dialogues_given_session_id(
-            db, session_id=session_id, max_results=self.num_previous_dialogues)[::-1]
+            db, session_id=session_id, max_results=self.num_previous_dialogues)
         for dialogue in message_history:
             message = {"role": dialogue.role, "content": dialogue.content}
             messages.append(message)
