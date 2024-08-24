@@ -10,8 +10,9 @@ from application.initializer import LoggerInstance
 router = APIRouter(prefix='/doc_qa')
 logger = LoggerInstance().get_logger(__name__)
 
+
 @router.post("/")
-def save_doc(
+async def save_doc(
         doc: DocumentCreate,
         db: Session = Depends(get_db_session),
         service: DocumentQuestionAnsweringService = Depends(get_document_question_answering_service)
@@ -23,12 +24,13 @@ def save_doc(
 
 
 @router.get("/{model}/{session_id}")
-def question_answering(
+async def question_answering(
         model: str,
         session_id: str,
         question: str,
         db: Session = Depends(get_db_session),
         service: DocumentQuestionAnsweringService = Depends(get_document_question_answering_service)
 ):
+    return {"assistant_response": "Not implemented yet"}
     assistant_response = service.get_assistant_response(db, model, session_id, question)
     return {"assistant_response": assistant_response}

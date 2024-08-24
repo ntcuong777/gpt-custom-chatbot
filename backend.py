@@ -1,9 +1,16 @@
 import uvicorn
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from application.initializer import IncludeAPIRouter, SqlDatabaseInitializer
 from application.main.config import settings
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    await app_shutdown()
 
 
 def get_application():
@@ -24,10 +31,9 @@ SqlDatabaseInitializer.init_database()
 app = get_application()
 
 
-@app.on_event("shutdown")
 async def app_shutdown():
     # on app shutdown do something probably close some connections or trigger some event
     print("On App Shutdown i will be called.")
 
 
-#uvicorn.run("manage:app", host=settings.HOST, port=settings.PORT, log_level=settings.LOG_LEVEL, use_colors=True,reload=True)
+# uvicorn.run("backend:app", host=settings.HOST, port=settings.PORT, log_level=settings.LOG_LEVEL, use_colors=True,reload=True)

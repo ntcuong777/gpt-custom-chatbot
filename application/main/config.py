@@ -2,7 +2,8 @@
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseSettings, Field, BaseModel
+from pydantic import Field, BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppConfig(BaseModel):
@@ -21,11 +22,16 @@ class AppConfig(BaseModel):
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
     # ChatGPT conversational API config
-    NUM_PREVIOUS_DIALOGUES: int = 10 # only use previous 5 dialogues to generate new responses
+    NUM_PREVIOUS_DIALOGUES: int = 10  # only use previous 5 dialogues to generate new responses
 
 
 class GlobalConfig(BaseSettings):
     """Global configurations."""
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='allow',
+    )
 
     # These variables will be loaded from the .env file. However, if
     # there is a shell environment variable having the same name,
@@ -33,42 +39,43 @@ class GlobalConfig(BaseSettings):
 
     APP_CONFIG: AppConfig = AppConfig()
 
-    API_NAME: Optional[str] = Field(None, env="API_NAME")
-    API_DESCRIPTION: Optional[str] = Field(None, env="API_DESCRIPTION")
-    API_VERSION: Optional[str] = Field(None, env="API_VERSION")
-    API_DEBUG_MODE: Optional[bool] = Field(None, env="API_DEBUG_MODE")
+    API_NAME: Optional[str] = Field(None, alias="API_NAME")
+    API_DESCRIPTION: Optional[str] = Field(None, alias="API_DESCRIPTION")
+    API_VERSION: Optional[str] = Field(None, alias="API_VERSION")
+    API_DEBUG_MODE: Optional[bool] = Field(None, alias="API_DEBUG_MODE")
 
     # define global variables with the Field class
-    ENV_STATE: Optional[str] = Field(None, env="ENV_STATE")
+    ENV_STATE: Optional[str] = Field(None, alias="ENV_STATE")
 
     # logging configuration file
-    LOG_CONFIG_FILENAME: Optional[str] = Field(None, env="LOG_CONFIG_FILENAME")
+    LOG_CONFIG_FILENAME: Optional[str] = Field(None, alias="LOG_CONFIG_FILENAME")
 
     # environment specific variables do not need the Field class
-    HOST: Optional[str] = None
-    PORT: Optional[int] = None
-    LOG_LEVEL: Optional[str] = None
+    HOST: Optional[str] = Field('0.0.0.0', alias="HOST")
+    PORT: Optional[int] = Field(8000, alias="PORT")
+    LOG_LEVEL: Optional[str] = Field('info', alias="LOG_LEVEL")
 
-    DB: Optional[str] = None
-
-    class Config:
-        """Loads the dotenv file."""
-
-        env_file: str = ".env"
+    DB: Optional[str] = Field('sqlite', alias="DB")
 
 
 class DevConfig(GlobalConfig):
     """Development configurations."""
-
-    class Config:
-        env_prefix: str = "DEV_"
+    model_config = SettingsConfigDict(
+        env_prefix='DEV_',
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='allow',
+    )
 
 
 class ProdConfig(GlobalConfig):
     """Production configurations."""
-
-    class Config:
-        env_prefix: str = "PROD_"
+    model_config = SettingsConfigDict(
+        env_prefix='PROD_',
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='allow',
+    )
 
 
 class FactoryConfig:

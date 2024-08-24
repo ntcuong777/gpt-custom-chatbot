@@ -1,15 +1,18 @@
 import os
 import time
 import requests
-from requests.exceptions import JSONDecodeError, ConnectionError
 import streamlit as st
+
+from typing import Generator
+from streamlit_markdown import st_markdown, st_streaming_markdown
+from requests.exceptions import JSONDecodeError, ConnectionError
 from dotenv import load_dotenv, find_dotenv
 
 ################ BEGIN : Global constants ################
 MAX_DIALOGUE_TURNS = 20
 FASTAPI_SERVER_PORT = 8000
 FASTAPI_SERVER_API_PATH = "http://127.0.0.1:" + str(FASTAPI_SERVER_PORT) + "/api/v1"
-OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4"]
+OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4o", "gpt-4o-mini"]
 DEFAULT_OPENAI_MODEL_INDEX = 0
 DEFAULT_DUMMY_ASSISTANT_RESPONE = "dummy response"
 ################ END   : Global constants ################
@@ -80,7 +83,6 @@ def get_assistant_response(user_message):
         except:
             print("Server error!!!")
 
-
     def get_assistant_response():
         try:
             request_path = FASTAPI_SERVER_API_PATH + "/conversational/" + st.session_state.openai_model \
@@ -97,7 +99,6 @@ def get_assistant_response(user_message):
 
         return DEFAULT_DUMMY_ASSISTANT_RESPONE
 
-
     save_user_dialogue()
     return get_assistant_response()
 
@@ -109,17 +110,19 @@ def render_chatbox():
     # Render previous history
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
+            # formatted_message(message["content"], is_user=(message["role"] == "user"))
             st.markdown(message["content"])
 
     # Render input box and request assistant answer upon user input
     if prompt := st.chat_input("What is up?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
+            # st_markdown(prompt)
             st.markdown(prompt)
 
         with st.chat_message("assistant"):
-            message_placeholder = st.empty()
             full_response = get_assistant_response(prompt)
+            message_placeholder = st.empty()
             tmp_response = ""
             for i in range(len(full_response)):
                 tmp_response += full_response[i]
@@ -128,7 +131,7 @@ def render_chatbox():
 
             message_placeholder.markdown(full_response)
 
-        st.session_state.messages.append({"role": "assistant", "content": full_response})    
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
 def render_frontend():

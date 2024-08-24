@@ -15,7 +15,7 @@ def make_token():
 
 
 @router.get("/")
-def conversational_chat():
+async def conversational_chat():
     session_id = make_token()
     logger.debug("Session ID = %s has been connected", session_id)
     return {"session_id": session_id}

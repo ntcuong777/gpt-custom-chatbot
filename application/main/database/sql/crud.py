@@ -12,14 +12,11 @@ class ChatDialogueCrud:
         query = select(models.ChatDialogue).where(models.ChatDialogue.session_id == session_id)\
             .order_by(models.ChatDialogue.sequence.desc()).limit(max_results)
         return db.scalars(query).all()
-        
-
 
     @staticmethod
     def count_dialogues_given_session_id(db: Session, session_id: str) -> int:
         query = select(func.count()).select_from(models.ChatDialogue).where(models.ChatDialogue.session_id == session_id)
         return db.execute(query).scalar_one()
-
 
     @staticmethod
     def create_chat_dialogue(db: Session, dialogue: schemas.ChatDialogueCreate) -> models.ChatDialogue:
@@ -41,7 +38,6 @@ class DocumentCrud:
         else:
             return results[0]
 
-
     @staticmethod
     def fetch_single_document_given_session_id_eagerly_fetch_embeddings(db: Session, session_id: str) -> models.Document:
         query = select(models.Document).where(models.Document.session_id == session_id)\
@@ -51,7 +47,6 @@ class DocumentCrud:
             raise MultipleResultsFound()
         else:
             return results[0]
-
 
     @staticmethod
     def create_document_without_embeddings(db: Session, session_id: str, doc_content: str) -> models.Document:

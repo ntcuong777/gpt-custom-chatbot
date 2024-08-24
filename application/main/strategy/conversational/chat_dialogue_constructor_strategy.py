@@ -25,14 +25,13 @@ class SimpleChatDialogueConstructorStrategy(AbstractChatDialogueConstructorStrat
     def __init__(self):
         self.num_previous_dialogues = settings.APP_CONFIG.NUM_PREVIOUS_DIALOGUES
 
-
     @overrides(AbstractChatDialogueConstructorStrategy)
     def construct_chat_dialogue(self, db: Session, session_id: str) -> List[Dict]:
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
         ]
-        message_history = crud.fetch_all_dialogues_given_session_id(db, session_id=session_id, \
-            max_results=self.num_previous_dialogues)[::-1]
+        message_history = crud.ChatDialogueCrud.fetch_all_dialogues_given_session_id(
+            db, session_id=session_id, max_results=self.num_previous_dialogues)[::-1]
         for dialogue in message_history:
             message = {"role": dialogue.role, "content": dialogue.content}
             messages.append(message)

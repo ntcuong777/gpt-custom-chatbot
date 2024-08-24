@@ -1,5 +1,6 @@
 from fastapi.routing import APIRouter
 from fastapi import Depends
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from application.main.database.sql.sqlite import get_db_session
@@ -10,8 +11,9 @@ from application.initializer import LoggerInstance
 router = APIRouter(prefix='/conversational')
 logger = LoggerInstance().get_logger(__name__)
 
+
 @router.post("/")
-def conversational_chat(
+async def conversational_chat(
         user_dialogue: ChatDialogueBase,
         db: Session = Depends(get_db_session),
         service: ConversationalChatService = Depends(get_conversational_chat_service)
@@ -23,11 +25,21 @@ def conversational_chat(
 
 
 @router.get("/{model}/{session_id}")
-def conversational_chat(
+async def conversational_chat(
         model: str,
         session_id: str,
         db: Session = Depends(get_db_session),
         service: ConversationalChatService = Depends(get_conversational_chat_service)
 ):
-    assistant_response = service.get_assistant_response(db, model, session_id)
+    assistant_response = service.get_assistant_response(db, session_id, model=model)
     return {"assistant_response": assistant_response}
+
+
+@router.get("/{model}/{session_id}/stream")
+async def conversational_chat(
+        model: str,
+        session_id: str,
+        db: Session = Depends(get_db_session),
+        service: ConversationalChatService = Depends(get_conversational_chat_service)
+):
+    return StreamingResponse(service.aget_assistant_response(db, session_id, model=model))
