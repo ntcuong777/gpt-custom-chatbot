@@ -1,12 +1,11 @@
 import os
 import openai
 
-from typing import List, Iterator
+from typing import Generator, AsyncIterable
 from sqlalchemy.orm import Session
 
 from application.main.chains import get_langchain_chain
 
-from application.main.config import settings
 from application.main.database.sql.schemas import ChatDialogueCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud
@@ -41,7 +40,7 @@ class ConversationalChatService(object):
 
         return assistant_response
 
-    async def aget_assistant_response(self, db: Session, session_id: str, model: str = "gpt-4o-mini") -> Iterator[str]:
+    async def aget_assistant_response(self, db: Session, session_id: str, model: str = "gpt-4o-mini") -> AsyncIterable[str]:
         messages = self.chat_dialogue_constructor_strategy.construct_chat_dialogue(db, session_id)
 
         llm_chain = get_langchain_chain(model)

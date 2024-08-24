@@ -13,7 +13,7 @@ class AppConfig(BaseModel):
     # we do not want to pollute the env level config with these information
     # this can change on the basis of usage
 
-    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
     SETTINGS_DIR: Path = BASE_DIR.joinpath('settings')
     SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -43,12 +43,15 @@ class GlobalConfig(BaseSettings):
     API_DESCRIPTION: Optional[str] = Field(None, alias="API_DESCRIPTION")
     API_VERSION: Optional[str] = Field(None, alias="API_VERSION")
     API_DEBUG_MODE: Optional[bool] = Field(None, alias="API_DEBUG_MODE")
+    OPENROUTER_API_URL: Optional[str] = Field("https://openrouter.ai/api/v1", alias="OPENROUTER_API_URL")
+    STREAM_RESPONSE: Optional[bool] = Field(False, alias="STREAM_RESPONSE")
 
     # define global variables with the Field class
     ENV_STATE: Optional[str] = Field(None, alias="ENV_STATE")
 
     # logging configuration file
     LOG_CONFIG_FILENAME: Optional[str] = Field(None, alias="LOG_CONFIG_FILENAME")
+    LLM_CONFIG_FILENAME: Optional[str] = Field(None, alias="LLM_CONFIG_FILENAME")
 
     # environment specific variables do not need the Field class
     HOST: Optional[str] = Field('0.0.0.0', alias="HOST")

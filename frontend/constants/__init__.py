@@ -1,6 +1,0 @@
-MAX_DIALOGUE_TURNS = 20
-FASTAPI_SERVER_PORT = 8000
-FASTAPI_SERVER_API_PATH = "http://127.0.0.1:" + str(FASTAPI_SERVER_PORT) + "/api/v1"
-OPENAI_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4o", "gpt-4o-mini"]
-DEFAULT_OPENAI_MODEL_INDEX = 0
-DEFAULT_DUMMY_ASSISTANT_RESPONE = "dummy response"

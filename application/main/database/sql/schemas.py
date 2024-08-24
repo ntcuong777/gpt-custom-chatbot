@@ -16,7 +16,7 @@ class ChatDialogue(ChatDialogueCreate):
     sequence: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 ################# END: Model for chat dialogue function #################
 
@@ -49,14 +49,14 @@ class Document(DocumentCreate):
     embeddings: List[DocumentEmbeddingsBase]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class DocumentEmbeddings(DocumentEmbeddingsCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 ################# START: Model for document QA function #################

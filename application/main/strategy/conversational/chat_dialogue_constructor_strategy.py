@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict
 from sqlalchemy.orm import Session
-from application.main.config import settings
+from common.config import settings
 from application.initializer import LoggerInstance
 from application.main.database.sql import crud
 from application.main.decorator import overrides

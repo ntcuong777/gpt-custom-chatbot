@@ -1,6 +1,6 @@
 class LoggerInstance(object):
     def __new__(cls):
-        from application.main.utility.logger.custom_logging import LogHandler
+        from common.utility.logger.custom_logging import LogHandler
         return LogHandler()
 
 

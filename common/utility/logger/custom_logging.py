@@ -1,7 +1,7 @@
 import logging
 from typing import List
 
-from application.main.utility.logger.handlers import Handlers
+from common.utility.logger.handlers import Handlers
 
 
 class LogHandler(object):

@@ -1,6 +1,5 @@
 import os
 import openai
-from application.main.config import settings
 from application.main.database.sql.schemas import ChatDialogueCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud

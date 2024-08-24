@@ -1,0 +1,160 @@
+llm_models:
+  chat_models:
+    - id: "nousresearch/hermes-3-llama-3.1-405b"
+      name: "Hermes 3-405B (Free)"
+      cost:
+        input: 0
+        output: 0
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "nousresearch/hermes-3-llama-3.1-405b:extended"
+      name: "Hermes 3-405B - Extended (Free)"
+      cost:
+        input: 0
+        output: 0
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "nousresearch/hermes-3-llama-3.1-70b"
+      name: "Hermes 3-70B (Free)"
+      cost:
+        input: 0
+        output: 0
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "meta-llama/llama-3.1-8b-instruct:free"
+      name: "Meta: Llama 3.1 8B Instruct (Free)"
+      cost:
+        input: 0
+        output: 0
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "meta-llama/llama-3.1-70b-instruct"
+      name: "Meta: Llama 3.1 70B Instruct"
+      cost:
+        input: 0.35
+        output: 0.4
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "mistralai/mixtral-8x22b-instruct"
+      name: "Mixtral 8x22B"
+      cost:
+        input: 0.65
+        output: 0.65
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "anthropic/claude-3-haiku"
+      name: "Claude 3 Haiku"
+      cost:
+        input: 0.25
+        output: 1.25
+        imgs: 0.4
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "openai/gpt-4o-mini-2024-07-18"
+      name: "GPT-4o-mini"
+      cost:
+        input: 0.15
+        output: 0.6
+        imgs: 7.225
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "meta-llama/llama-3.1-405b-instruct"
+      name: "Meta: Llama 3.1 405B Instruct"
+      cost:
+        input: 2.7
+        output: 2.7
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "mistralai/mistral-large"
+      name: "Mixtral Large"
+      cost:
+        input: 3
+        output: 9
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "openai/gpt-4o-2024-08-06"
+      name: "GPT-4o"
+      cost:
+        input: 2.5
+        output: 10
+        imgs: 3.613
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "anthropic/claude-3.5-sonnet"
+      name: "Claude 3.5 Sonnet"
+      cost:
+        input: 3
+        output: 15
+        imgs: 4.8
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "openai/gpt-4o:extended"
+      name: "GPT-4o - Extended"
+      cost:
+        input: 6
+        output: 18
+        imgs: 7.225
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "anthropic/claude-3-opus"
+      name: "Claude 3 Opus"
+      cost:
+        input: 15
+        output: 75
+        imgs: 24
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "gpt-3.5-turbo"
+      name: "GPT-3.5 (Direct)"
+      cost:
+        input: 3
+        output: 6
+      base_url: "${OPENAI_API_URL}"
+      api_key: "${OPENAI_API_KEY}"
+    - id: "gpt-3.5-turbo-16k"
+      name: "GPT-3.5 16k (Direct)"
+      cost:
+        input: 3
+        output: 6
+      base_url: "${OPENAI_API_URL}"
+      api_key: "${OPENAI_API_KEY}"
+    - id: "gpt-4o-2024-08-06"
+      name: "GPT-4o (Direct)"
+      cost:
+        input: 3.75
+        output: 15
+      base_url: "${OPENAI_API_URL}"
+      api_key: "${OPENAI_API_KEY}"
+    - id: "gpt-4o-mini-2024-07-18"
+      name: "GPT-4o Mini (Direct)"
+      cost:
+        input: 0.3
+        output: 1.2
+      base_url: "${OPENAI_API_URL}"
+      api_key: "${OPENAI_API_KEY}"
+
+  search_models:
+    - id: "perplexity/llama-3.1-sonar-small-128k-chat"
+      name: "Perplexity: Sonar 8B"
+      cost:
+        input: 5
+        output: 5
+        reqs: 5
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "perplexity/llama-3.1-sonar-large-128k-online"
+      name: "Perplexity: Sonar 70B"
+      cost:
+        input: 5
+        output: 5
+        reqs: 5
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"
+    - id: "perplexity/llama-3.1-sonar-huge-128k-online"
+      name: "Perplexity: Sonar 405B"
+      cost:
+        input: 5
+        output: 5
+        reqs: 5
+      base_url: "${OPENROUTER_API_URL}"
+      api_key: "${OPENROUTER_API_KEY}"

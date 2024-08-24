@@ -1,10 +1,10 @@
-import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv, find_dotenv
 
 from application.initializer import IncludeAPIRouter, SqlDatabaseInitializer
-from application.main.config import settings
+from common.config import settings
 
 
 @asynccontextmanager
@@ -14,9 +14,9 @@ async def lifespan(app: FastAPI):
 
 
 def get_application():
-    _app = FastAPI(title=settings.API_NAME,
-                   description=settings.API_DESCRIPTION,
-                   version=settings.API_VERSION)
+    _app = FastAPI(
+        title=settings.API_NAME, description=settings.API_DESCRIPTION, version=settings.API_VERSION
+    )
     _app.include_router(IncludeAPIRouter())
     _app.add_middleware(
         CORSMiddleware,
@@ -27,6 +27,7 @@ def get_application():
     return _app
 
 
+load_dotenv(find_dotenv())
 SqlDatabaseInitializer.init_database()
 app = get_application()
 

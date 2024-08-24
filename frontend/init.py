@@ -1,9 +1,8 @@
-import requests
 import streamlit as st
 
-from json import JSONDecodeError
+from common.constants import MAX_DIALOGUE_TURNS
+from .common import get_user_session
 
-from .constants import *
 
 def init_streamlit_page_config():
     st.set_page_config(
@@ -23,21 +22,9 @@ def initialize_app_states():
     if "session_id" not in st.session_state:
         st.session_state.session_id = None
 
-    # initialize "openai_model" session_state
-    if "openai_model" not in st.session_state:
-        st.session_state.openai_model = OPENAI_MODELS[DEFAULT_OPENAI_MODEL_INDEX]
-
-
-def get_user_session():
-    try:
-        request_path = FASTAPI_SERVER_API_PATH + "/user_session"
-        response = requests.get(request_path)
-        json_response = response.json()
-        st.session_state["session_id"] = json_response["session_id"] if "session_id" in json_response else None
-    except ConnectionError:
-        print("Cannot connect to server!!!")
-    except JSONDecodeError:
-        print("No valid session_id response")
+    # # initialize "llm_model" session_state
+    # if "llm_model" not in st.session_state:
+    #     st.session_state.llm_model = ModelByCategory.all_models[DEFAULT_LLM_MODEL_ID]
 
 
 def ensure_short_dialogue_history():

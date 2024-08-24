@@ -2,12 +2,11 @@ import logging
 import sys
 from logging.handlers import TimedRotatingFileHandler, SocketHandler
 from pathlib import Path
-from application.main.config import settings
-from application.main.utility.config_loader import ConfigReaderInstance
+from common.config import settings
+from common.utility.config_loader import ConfigReaderInstance
 
 
-logging_config = ConfigReaderInstance.yaml.read_config_from_file(
-    settings.LOG_CONFIG_FILENAME)
+logging_config = ConfigReaderInstance.yaml.read_config_from_file(settings.LOG_CONFIG_FILENAME)
 
 
 class Handlers:
