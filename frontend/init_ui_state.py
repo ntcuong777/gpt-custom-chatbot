@@ -21,6 +21,9 @@ def initialize_app_states():
     if "session_id" not in st.session_state:
         st.session_state.session_id = None
 
+    if "system_message" not in st.session_state:
+        st.session_state.system_message = None
+
     # # initialize "llm_model" session_state
     # if "llm_model" not in st.session_state:
     #     st.session_state.llm_model = ModelByCategory.all_models[DEFAULT_LLM_MODEL_ID]

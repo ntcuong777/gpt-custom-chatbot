@@ -33,4 +33,5 @@ def on_new_chat():
     # delete all messages and reset session_id
     st.session_state.messages = []
     st.session_state.session_id = None
+    st.session_state.system_message = None
     initialize_app_states()
