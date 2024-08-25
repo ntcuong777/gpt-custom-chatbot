@@ -57,6 +57,8 @@ def render_chat_interface():
     st.title("ChatGPT-like clone")
 
     with st.sidebar:
+        st.button("New chat", key="reset_chat", on_click=on_new_chat)
+
         # options_col1, options_col2 = st.columns(2, vertical_alignment="top")
         #
         # opt1_col1, opt1_col2 = options_col1.columns(2, vertical_alignment="top")
@@ -82,13 +84,11 @@ def render_chat_interface():
         st.toggle("Advanced mode", key="advanced_mode")
         if st.session_state.advanced_mode:
             # params_popover = options_col2.popover("⚙️Advanced parameters")
-            params_popover = st.popover("⚙️Advanced parameters")
+            params_expander = st.expander("⚙️Advanced parameters")
             advanced_components = llm_config.streamlit_advanced_components
             for param, st_comp in advanced_components.items():
-                comp_fn = getattr(params_popover, st_comp["streamlit_component"])
+                comp_fn = getattr(params_expander, st_comp["streamlit_component"])
                 comp_fn(*st_comp["args"], **st_comp["kwargs"])
-
-        st.button("New chat", key="reset_chat", on_click=on_new_chat)
 
     # Chat box
     get_user_session()
