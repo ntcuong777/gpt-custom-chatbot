@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from application.main.database.sql.schemas import ChatSessionCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 
 from .base_service import BaseService
 

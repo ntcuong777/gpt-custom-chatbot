@@ -1,4 +1,5 @@
 FILENAME: "fast_api.log"
 FORMATTER: "%(asctime)s - %(thread)d - %(name)s - %(levelname)s - %(message)s"
 ROTATION: "midnight"
+SEVERITY: "DEBUG"
 # adjust severity to DEBUG

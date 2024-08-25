@@ -5,6 +5,9 @@ import streamlit as st
 from json import JSONDecodeError
 
 from common.constants import FASTAPI_SERVER_API_PATH, MAX_DIALOGUE_TURNS, DUMMY_SESSION_ID
+from common.logging import LoggerInstance
+
+logger = LoggerInstance().get_logger(__name__)
 
 
 def get_user_session():
@@ -15,12 +18,12 @@ def get_user_session():
             json_response = response.json()
             st.session_state["session_id"] = json_response["session_id"] if "session_id" in json_response else None
         except ConnectionError:
-            print("Cannot connect to server!!!")
+            logger.error("Cannot connect to server!!!")
         except JSONDecodeError:
-            print("No valid session_id response")
+            logger.error("No valid session_id response")
         except Exception:
             exc_details = traceback.format_exc()
-            print(f"Error: {exc_details}")
+            logger.error(f"Error: {exc_details}")
             expander = st.expander("[Init] Exception occurred", icon="❌")
             expander.error(f"Error occurred while trying to get a new session. Using dummy session. Exception details:\n```{exc_details}```")
 

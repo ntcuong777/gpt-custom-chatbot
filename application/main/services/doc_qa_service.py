@@ -4,7 +4,7 @@ from application.main.database.sql.schemas import ChatDialogueCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud
 from sqlalchemy.orm import Session
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 from application.main.strategy.doc_qa import AbstractDocQAProcessorStrategy, SimpleDocQAProcessorStrategy
 
 from .base_service import BaseService

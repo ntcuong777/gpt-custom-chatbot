@@ -9,6 +9,9 @@ from typing import Generator
 from json import JSONDecodeError
 
 from common.constants import *
+from common.logging import LoggerInstance
+
+logger = LoggerInstance().get_logger(__name__)
 
 
 def _save_user_dialogue(user_msg: str):
@@ -17,12 +20,12 @@ def _save_user_dialogue(user_msg: str):
         request_body = {"session_id": st.session_state.session_id, "content": user_msg}
         requests.post(request_path, json=request_body)
     except ConnectionError:
-        print("Cannot connect to server!!!")
+        logger.error("Cannot connect to server!!!")
     except JSONDecodeError:
-        print("No valid response")
+        logger.error("No valid response")
     except Exception as e:
-        print(f"Server error!!! Err = {str(e)}")
-        print(f"Stack trace: {traceback.format_exc()}")
+        logger.error(f"Server error!!! Err = {str(e)}")
+        logger.error(f"Stack trace: {traceback.format_exc()}")
 
 
 def _collect_model_kwargs() -> dict:
@@ -56,12 +59,12 @@ def get_assistant_response(user_msg: str, model_kwargs: dict = None) -> str:
             if "assistant_response" in json_response \
             else DEFAULT_DUMMY_ASSISTANT_RESPONSE
     except ConnectionError:
-        print("Cannot connect to server!!!")
+        logger.error("Cannot connect to server!!!")
     except JSONDecodeError:
-        print("No valid assistant response")
+        logger.error("No valid assistant response")
     except Exception as e:
-        print(f"Server error!!! Err = {str(e)}")
-        print(f"Stack trace: {traceback.format_exc()}")
+        logger.error(f"Server error!!! Err = {str(e)}")
+        logger.error(f"Stack trace: {traceback.format_exc()}")
 
     return DEFAULT_DUMMY_ASSISTANT_RESPONSE
 
@@ -82,12 +85,12 @@ def stream_assistant_response(user_msg: str, model_kwargs: dict = None) -> Gener
             for content in response.iter_content(chunk_size=None):
                 yield json.loads(content)["assistant_response"]
         except ConnectionError:
-            print("Cannot connect to server!!!")
+            logger.error("Cannot connect to server!!!")
             yield DEFAULT_DUMMY_ASSISTANT_RESPONSE
         except JSONDecodeError:
-            print("No valid assistant response")
+            logger.error("No valid assistant response")
             yield DEFAULT_DUMMY_ASSISTANT_RESPONSE
         except Exception as e:
-            print(f"Server error!!! Err = {str(e)}")
-            print(f"Stack trace: {traceback.format_exc()}")
+            logger.error(f"Server error!!! Err = {str(e)}")
+            logger.error(f"Stack trace: {traceback.format_exc()}")
             yield DEFAULT_DUMMY_ASSISTANT_RESPONSE

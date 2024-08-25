@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from application.main.database.sql.sqlite import get_db_session
 from application.main.database.sql.schemas import ChatDialogueBase, ChatDialogue
 from application.main.services.chat_service import get_conversational_chat_service, ConversationalChatService
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 
 from ._router_models import ModelRequestBody
 

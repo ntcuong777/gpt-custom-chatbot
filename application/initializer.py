@@ -1,9 +1,3 @@
-class LoggerInstance(object):
-    def __new__(cls):
-        from common.utility.logger.custom_logging import LogHandler
-        return LogHandler()
-
-
 class IncludeAPIRouter(object):
     def __new__(cls):
         from application.main.routers.chat_router import router as router_conversational_chat
@@ -23,7 +17,3 @@ class SqlDatabaseInitializer(object):
         from application.main.database.sql import models
         from application.main.database.sql.sqlite import sqlite_engine
         models.Base.metadata.create_all(bind=sqlite_engine)
-
-
-# instance creation
-logger_instance = LoggerInstance()

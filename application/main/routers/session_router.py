@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from application.main.database.sql.sqlite import get_db_session
 from application.main.services.chat_session_service import get_chat_session_service, ChatSessionService
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 
 from ._router_models import NewSessionBody, UpdateSysMsgBody
 

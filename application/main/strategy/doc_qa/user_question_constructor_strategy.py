@@ -3,7 +3,7 @@ import openai
 import functools
 from typing import List
 from abc import ABC, abstractmethod
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 from sqlalchemy.orm import Session
 from application.main.database.sql import crud
 from application.main.decorator import overrides

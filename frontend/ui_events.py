@@ -5,6 +5,9 @@ import streamlit as st
 from .ui_common import get_user_session
 from .init_ui_state import initialize_app_states
 from common.constants import *
+from common.logging import LoggerInstance
+
+logger = LoggerInstance().get_logger(__name__)
 
 
 def on_selection_change():
@@ -21,12 +24,12 @@ def on_system_message_change():
         try:
             request_path = FASTAPI_SERVER_API_PATH + "/user_session/set-system-message"
             response = requests.post(request_path, json={"session_id": session_id, "system_message": system_msg})
-            print(f"Update system message: {response.text}")
+            logger.debug(f"Update system message: {response.text}")
         except ConnectionError:
-            print("Cannot connect to server!!!")
+            logger.error("Cannot connect to server!!!")
         except Exception:
             exc_details = traceback.format_exc()
-            print(f"Error updating system message: {exc_details}")
+            logger.error(f"Error updating system message: {exc_details}")
 
 
 def on_new_chat():

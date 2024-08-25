@@ -9,7 +9,7 @@ from application.main.chains import get_langchain_chain, get_langchain_custom_mo
 from application.main.database.sql.schemas import ChatDialogueCreate
 from application.main.database.sql import models
 from application.main.database.sql import crud
-from application.initializer import LoggerInstance
+from common.logging import LoggerInstance
 from application.main.strategy.chat import SimpleChatDialogueConstructorStrategy, AbstractChatDialogueConstructorStrategy
 
 from .base_service import BaseService

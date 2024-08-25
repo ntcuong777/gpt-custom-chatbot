@@ -16,6 +16,7 @@ class Handlers:
         self.log_filename = Path().joinpath(
             settings.APP_CONFIG.LOGS_DIR, logging_config.FILENAME)
         self.rotation = logging_config.ROTATION
+        self.severity = logging_config.SEVERITY
 
     def get_console_handler(self):
         """
@@ -24,6 +25,7 @@ class Handlers:
         """
         console_handler = logging.StreamHandler(sys.stdout.flush())
         console_handler.setFormatter(self.formatter)
+        console_handler.setLevel(self.severity)
         return console_handler
 
     def get_file_handler(self):
@@ -34,6 +36,7 @@ class Handlers:
         file_handler = TimedRotatingFileHandler(
             self.log_filename, when=self.rotation)
         file_handler.setFormatter(self.formatter)
+        file_handler.setLevel(self.severity)
         return file_handler
 
     def get_socket_handler(self):
