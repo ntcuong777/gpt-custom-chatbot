@@ -6,8 +6,8 @@ authors = ["Nguyen Cuong <36143842+ntcuong777@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
-fastapi = "^0.112.1"
+python = "^3.11"
+fastapi = "^0.112.2"
 uvicorn = "^0.30.6"
 pandas = "^2.2.2"
 python-dotenv = "^1.0.1"
