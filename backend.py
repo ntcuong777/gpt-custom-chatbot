@@ -41,4 +41,6 @@ async def app_shutdown():
     scheduler_thread.set()
 
 
-# uvicorn.run("backend:app", host=settings.HOST, port=settings.PORT, log_level=settings.LOG_LEVEL, use_colors=True,reload=True)
+if settings.ENV_STATE == "prod":
+    import uvicorn
+    uvicorn.run("backend:app", host=settings.HOST, port=settings.PORT, log_level=settings.LOG_LEVEL, use_colors=True, reload=False)
