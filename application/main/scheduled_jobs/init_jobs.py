@@ -32,7 +32,7 @@ def run_continuously(interval=1):
 
 schedule.every(5).minutes.do(remove_empty_chats)
 schedule.every().week.do(remove_stale_chats)
-schedule.every().week.do(fetch_openrouter_models_info)
+# schedule.every().week.do(fetch_openrouter_models_info)
 
 # Start the background thread
 scheduler_thread = run_continuously()
